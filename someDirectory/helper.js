@@ -1,5 +1,7 @@
 const foo = () => {
-    console.log('Hello world')
+    console.log(__dirname);
+    console.log(__filename);
+    console.log(process.cwd());
 }
 
 console.log('Hello from helper');
