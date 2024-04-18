@@ -6,10 +6,20 @@ const path = require('node:path');
 
 async function foo() {
     try {
-        await fsPromises.mkdir(path.join(__dirname, 'baseFolder'), {recursive: true})
+        for (let i = 1; i < 6; i++) {
+            const folderPath = path.join(__dirname, 'baseFolder', `file${i}`);
+            await fsPromises.mkdir(folderPath, {recursive:true});
+            for (let j = 1; j < 6; j++) {
+                const filePath = path.join(folderPath, `text${j}.txt`);
+                await fsPromises.writeFile(filePath, `Some content ${j}`);
+                const stats = await fsPromises.stat(filePath);
+                console.log(`${stats.isDirectory() ? 'Folder' : 'File'} path: ${filePath}`);
+            }
+        }
     }catch (e) {
         console.error(e)
     }
 }
 
 void foo();
+
