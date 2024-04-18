@@ -9,11 +9,17 @@ async function foo() {
         for (let i = 1; i < 6; i++) {
             const folderPath = path.join(__dirname, 'baseFolder', `file${i}`);
             await fsPromises.mkdir(folderPath, {recursive:true});
-            console.log(`${folderPath} - is a folder`);
+            const statsFolder = await fsPromises.stat(folderPath);
+            statsFolder.isDirectory() ? console.log(`${folderPath} - It is a folder`) : console.log(`${folderPath} - It is not folder`);
+
+            // console.log(`${folderPath} - is a folder`);
             for (let j = 1; j < 6; j++) {
                 const filePath = path.join(folderPath, `text${j}.txt`);
                 await fsPromises.writeFile(filePath, `Some content ${j}`);
-                console.log(`${filePath} - is a file`);
+                const statsFile = await fsPromises.stat(filePath);
+                statsFile.isFile() ? console.log(`${filePath} - It is a file`) : console.log(`${filePath} - It is not a file`);
+
+                // console.log(`${filePath} - is a file`);
             }
         }
     }catch (e) {
