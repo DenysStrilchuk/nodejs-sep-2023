@@ -1,5 +1,5 @@
-const http = require('node:http');
-
+const express = require('express');
+const app = express();
 
 const users = [
     { id: 1, name:'Maksym', email:'feden@gmail.com', password:'we123'},
@@ -14,21 +14,16 @@ const users = [
     { id: 10, name: 'Yulia', email: 'yulia@example.com', password: 'yuliapass' }
 ]
 
-async function foo() {
-    try {
-        const server = http.createServer((req,res)=>{
-            if (req.method === 'GET' && req.url === '/users') {
-                res.end(JSON.stringify(users));
-            }
-            res.end('Hello from Node.js');
-        });
-        server.listen(3000,'0.0.0.0', ()=>{
-            console.log('server is running at http://0.0.0.0:3000/')
-        })
-    } catch (e) {
-        console.error(e)
-    }
-}
+// respond with "hello world" when a GET request is made to the homepage
+app.get('/', function(req, res) {
+    res.send('hello world');
+});
 
-void foo();
+app.get('/users', function(req, res) {
+    res.send(users);
+});
+app.listen(3000,'0.0.0.0', ()=>{
+    console.log('server is running at http://0.0.0.0:3000/')
+})
+
 
