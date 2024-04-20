@@ -20,8 +20,13 @@ app.get('/', function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-    res.send(users);
+    res.status(230).send(users);
 });
+
+app.post('/users', function(req, res) {
+    res.status(230).send(users);
+});
+
 app.listen(3000,'0.0.0.0', ()=>{
     console.log('server is running at http://0.0.0.0:3000/')
 })
