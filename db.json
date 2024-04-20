@@ -1,11 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Maksym",
-    "email":"feden@gmail.com",
-    "password":"we123"
-  },
-  {
     "id": 2,
     "name": "Iryna",
     "email": "iryna@example.com",
@@ -41,12 +35,14 @@
     "email": "vitaliy@example.com",
     "password": "vitalikpass"
   },
-  { "id": 8,
+  {
+    "id": 8,
     "name": "Natalia",
     "email": "natalya@example.com",
     "password": "natalyapass"
   },
-  { "id": 9,
+  {
+    "id": 9,
     "name": "Ihor",
     "email": "igor@example.com",
     "password": "igor789"
@@ -56,5 +52,17 @@
     "name": "Yulia",
     "email": "yulia@example.com",
     "password": "yuliapass"
+  },
+  {
+    "id": 11,
+    "name": "Viktor",
+    "email": "viktor21@gmail.com",
+    "password": "qwery937"
+  },
+  {
+    "id": 12,
+    "name": "Denis",
+    "email": "denia888@gmail.com",
+    "password": "qwery123"
   }
 ]
