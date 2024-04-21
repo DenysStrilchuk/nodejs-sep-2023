@@ -1,15 +1,21 @@
 [
   {
+    "id": 1,
+    "name": "Max",
+    "email": "max888@gmail.com",
+    "password": "qwery1223ssls"
+  },
+  {
     "id": 2,
-    "name": "Iryna",
-    "email": "iryna@example.com",
-    "password": "qwerty"
+    "name": "Denis2345",
+    "email": "denia888@gmail.com",
+    "password": "qwery1223"
   },
   {
     "id": 3,
     "name": "Oleh",
     "email": "oleg@example.com",
-    "password": "password123"
+    "password": "test2"
   },
   {
     "id": 4,
@@ -61,8 +67,8 @@
   },
   {
     "id": 12,
-    "name": "Denis",
-    "email": "denia888@gmail.com",
+    "name": "Denys",
+    "email": "denia876@gmail.com",
     "password": "qwery123"
   }
 ]

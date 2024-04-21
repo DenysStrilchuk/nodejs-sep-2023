@@ -48,6 +48,25 @@ app.get('/users/:userId', async (req, res) => {
     }
 });
 
+app.put('/users/:userId', async (req, res) => {
+    try {
+        const {name, email, password} = req.body;
+        const userId = Number(req.params.userId);
+        const users = await reader();
+
+        const index = users.findIndex((user) => user.id ===  userId);
+        if (index === -1) {
+            throw new Error('User  not found');
+        }
+        users[index] = {...users[index],name, email, password};
+        await writer(users);
+
+        res.status(201).json(users[index]);
+    } catch (e) {
+        res.status(400).json(e.message);
+    }
+});
+
 app.delete('/users/:userId', async (req, res) => {
     try {
         const userId = Number(req.params.userId);
@@ -66,8 +85,9 @@ app.delete('/users/:userId', async (req, res) => {
     }
 });
 
-app.listen(3000,'0.0.0.0', ()=>{
-    console.log('server is running at http://0.0.0.0:3000/')
+const PORT = 3000;
+app.listen(PORT,'0.0.0.0', ()=>{
+    console.log(`server is running at http://0.0.0.0:${PORT}/`);
 })
 
 
