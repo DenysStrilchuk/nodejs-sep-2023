@@ -1,7 +1,7 @@
 .idea
 node_modules
 dist
-dist/fs.service.js
-dist/main.js
+./dist/main.js
+./dist/fs.service.js
 nodejs-sep-2023.iml
 
