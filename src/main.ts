@@ -12,7 +12,7 @@ app.get("/", (res: Response) => {
   res.send("hello world");
 });
 
-app.get("/users", async (res: Response) => {
+app.get("/users", async (req: Request, res: Response) => {
   try {
     const users = await reader();
     res.json(users);
