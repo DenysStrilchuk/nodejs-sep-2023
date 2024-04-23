@@ -152,6 +152,11 @@ app.use(
   },
 );
 
+process.on("uncaughtException", (error) => {
+  console.error("uncaughtException: ", error);
+  process.exit(1);
+});
+
 const PORT = 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`server is running at http://0.0.0.0:${PORT}/`);
