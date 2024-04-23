@@ -1,5 +1,4 @@
 .idea
 node_modules
-dist
 nodejs-sep-2023.iml
-
+/dist/
