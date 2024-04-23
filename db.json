@@ -88,5 +88,11 @@
     "name": "Vasya",
     "email": "vasya21@gmail.com",
     "password": "qwery1"
+  },
+  {
+    "id": 16,
+    "name": "Viktor",
+    "email": "viktor21@gmail.com",
+    "password": "qwery828291"
   }
 ]
