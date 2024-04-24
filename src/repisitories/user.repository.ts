@@ -20,12 +20,29 @@ export class UserRepository {
     return newUser;
   }
 
-  public async getUserById(): Promise<IUser[]> {
-    return await reader();
+  public async getUserById(userId: number): Promise<IUser> {
+    const users = await reader();
+    return users.find((user) => user.id === userId);
   }
-  public async updateUserById() {}
+  public async updateUserById(
+    userId: number,
+    dto: Partial<IUser>,
+  ): Promise<IUser> {
+    const { name, email, password } = dto;
+    const users = await reader();
 
-  public async deleteUserById() {}
+    const index = users.findIndex((user) => user.id === userId);
+    users[index] = { ...users[index], name, email, password };
+    await writer(users);
+    return users[index];
+  }
+
+  public async deleteUserById(userId: number): Promise<void> {
+    const users = await reader();
+    const index = users.findIndex((user) => user.id === userId);
+    users.splice(index, 1);
+    await writer(users);
+  }
 }
 
 export const userRepository = new UserRepository();

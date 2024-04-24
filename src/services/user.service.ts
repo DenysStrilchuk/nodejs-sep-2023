@@ -6,33 +6,33 @@ class UserService {
   public async getList(): Promise<IUser[]> {
     return await userRepository.getList();
   }
+
   public async createUser(dto: Partial<IUser>): Promise<IUser> {
-    const { name, email, password } = dto;
-
-    if (name.length > 15) {
-      throw new ApiError("Name should not be longer than 15 characters", 400);
-    }
-
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(email)) {
-      throw new ApiError("Invalid email", 400);
-    }
-
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-
-    if (!passwordPattern.test(password)) {
-      throw new ApiError(
-        "Password must consist of at least 6 characters and contain at least one number",
-        400,
-      );
-    }
     return await userRepository.createUser(dto);
   }
-  public async getUserById() {}
 
-  public async updateUserById() {}
-  public async deleteUserById() {}
+  public async getUserById(userId: number): Promise<IUser> {
+    const user = await userRepository.getUserById(userId);
+    if (!user) {
+      throw new ApiError("user not found", 404);
+    }
+    return user;
+  }
+
+  public async updateUserById(
+    userId: number,
+    dto: Partial<IUser>,
+  ): Promise<IUser> {
+    return await userRepository.updateUserById(userId, dto);
+  }
+
+  public async deleteUserById(userId: number): Promise<void> {
+    const user = await userRepository.getUserById(userId);
+    if (!user) {
+      throw new ApiError("user not found", 404);
+    }
+    return await userRepository.deleteUserById(userId);
+  }
 }
 
 export const userService = new UserService();
