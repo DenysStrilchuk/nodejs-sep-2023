@@ -2,3 +2,4 @@
 node_modules
 nodejs-sep-2023.iml
 /dist/
+.env
