@@ -6,9 +6,11 @@ import { IUser } from "../user.interface";
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
+    age: { type: Number, required: false },
     email: { type: String, required: true, unique: true },
+    phone: { type: String, required: false },
     password: { type: String, required: true },
-    role: { type: String, default: RoleEnum.USER },
+    role: { type: String, enum: RoleEnum, default: RoleEnum.USER },
     isDeleted: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
   },
