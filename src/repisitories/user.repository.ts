@@ -1,5 +1,5 @@
+import { IUser } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
-import { IUser } from "../user.interface";
 
 export class UserRepository {
   public async getList(): Promise<IUser[]> {
@@ -12,6 +12,10 @@ export class UserRepository {
 
   public async getUserById(userId: string): Promise<IUser> {
     return await User.findById(userId);
+  }
+
+  public async getUserByParams(params: Partial<IUser>): Promise<IUser> {
+    return await User.findOne(params);
   }
 
   public async updateUserById(
