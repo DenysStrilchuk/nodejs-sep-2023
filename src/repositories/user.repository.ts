@@ -1,33 +1,30 @@
 import { IUser } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
 
-export class UserRepository {
+class UserRepository {
   public async getList(): Promise<IUser[]> {
     return await User.find({});
   }
 
-  public async createUser(dto: Partial<IUser>): Promise<IUser> {
+  public async create(dto: Partial<IUser>): Promise<IUser> {
     return await User.create(dto);
   }
 
-  public async getUserById(userId: string): Promise<IUser> {
+  public async getById(userId: string): Promise<IUser> {
     return await User.findById(userId);
   }
 
-  public async getUserByParams(params: Partial<IUser>): Promise<IUser> {
+  public async getByParams(params: Partial<IUser>): Promise<IUser> {
     return await User.findOne(params);
   }
 
-  public async updateUserById(
-    userId: string,
-    dto: Partial<IUser>,
-  ): Promise<IUser> {
+  public async updateById(userId: string, dto: Partial<IUser>): Promise<IUser> {
     return await User.findByIdAndUpdate(userId, dto, {
       returnDocument: "after",
     });
   }
 
-  public async deleteUserById(userId: string): Promise<void> {
+  public async deleteById(userId: string): Promise<void> {
     await User.deleteOne({ _id: userId });
   }
 }

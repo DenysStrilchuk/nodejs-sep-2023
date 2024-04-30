@@ -16,21 +16,7 @@ class CommonMiddleware {
       next(e);
     }
   }
-  //ЩЕ ТАКИЙ ВАРІАНТ!!!!
-  // public isBodyValid(validator: ObjectSchema) {
-  //   return (req: Request, res: Response, next: NextFunction) => {
-  //     try {
-  //       const { value, error } = validator.validate(req.body);
-  //       if (error) {
-  //         throw new ApiError(error.details[0].message, 400);
-  //       }
-  //       req.body = value;
-  //       next();
-  //     } catch (e) {
-  //       next(e);
-  //     }
-  //   };
-  // }
+
   public isBodyValid(validator: ObjectSchema) {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -42,4 +28,5 @@ class CommonMiddleware {
     };
   }
 }
+
 export const commonMiddleware = new CommonMiddleware();

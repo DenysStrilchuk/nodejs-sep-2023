@@ -42,29 +42,26 @@ export class UserValidator {
     // 'string.uriRelativeOnly': '{{#label}} must be a valid relative uri',
     // 'string.uppercase': '{{#label}} must only contain uppercase characters'
   });
-  private static userAge = joi.number().min(18).max(100);
-  private static userEmail = joi
+  private static phone = joi.string().regex(regexConstant.PHONE).trim();
+  private static age = joi.number().min(18).max(100);
+  private static email = joi
     .string()
     .regex(regexConstant.EMAIL)
     .lowercase()
     .trim();
-  private static userPassword = joi
-    .string()
-    .regex(regexConstant.PASSWORD)
-    .trim();
-  private static userPhone = joi.string().regex(regexConstant.PHONE).trim();
+  private static password = joi.string().regex(regexConstant.PASSWORD).trim();
 
   public static create = joi.object({
     name: this.userName.required(),
-    age: this.userAge,
-    email: this.userEmail.required(),
-    phone: joi.string().regex(regexConstant.PHONE).trim(),
-    password: this.userPassword.required(),
+    email: this.email.required(),
+    password: this.password.required(),
+    phone: this.phone,
+    age: this.age,
   });
 
   public static update = joi.object({
     name: this.userName,
-    age: this.userAge,
-    phone: this.userPhone,
+    phone: this.phone,
+    age: this.age,
   });
 }
