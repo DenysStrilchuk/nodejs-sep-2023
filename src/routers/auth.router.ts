@@ -9,7 +9,13 @@ const router = Router();
 router.post(
   "/sign-up",
   commonMiddleware.isBodyValid(UserValidator.create),
-  authController.createUser,
+  authController.signUp,
+);
+
+router.post(
+  "/sign-in",
+  //commonMiddleware.isBodyValid(UserValidator.create),
+  authController.signIn,
 );
 
 export const authRouter = router;
