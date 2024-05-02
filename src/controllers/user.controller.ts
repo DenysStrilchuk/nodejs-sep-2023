@@ -4,19 +4,10 @@ import { IUser } from "../interfaces/user.interface";
 import { userService } from "../services/user.service";
 
 class UserController {
-  public async getList(req: Request, res: Response) {
+  public async getList(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await userService.getList();
       res.json(users);
-    } catch (e) {
-      res.status(400).json(e.message);
-    }
-  }
-  public async createUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      const dto = req.body as Partial<IUser>;
-      const newUser = userService.createUser(dto);
-      res.status(201).json(newUser);
     } catch (e) {
       next(e);
     }
