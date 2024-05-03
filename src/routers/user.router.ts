@@ -9,20 +9,17 @@ const router = Router();
 
 router.get("/", userController.getList);
 
-router.get("/:userId", commonMiddleware.isIdValid, userController.getUserById);
+router.get("/me", authMiddleware.checkAccessToken, userController.getMe);
 
 router.put(
-  "/:userId",
+  "/me",
   authMiddleware.checkAccessToken,
   commonMiddleware.isBodyValid(UserValidator.update),
-  commonMiddleware.isIdValid,
-  userController.updateUserById,
+  userController.updateMe,
 );
 
-router.delete(
-  "/:userId",
-  commonMiddleware.isIdValid,
-  userController.deleteUserById,
-);
+router.delete("/me", authMiddleware.checkAccessToken, userController.deleteMe);
+
+router.get("/:userId", commonMiddleware.isIdValid, userController.getUserById);
 
 export const userRouter = router;

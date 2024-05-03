@@ -67,4 +67,9 @@ export class UserValidator {
     age: this.userAge,
     phone: this.userPhone,
   });
+
+  public static login = joi.object({
+    email: this.userEmail.required(),
+    password: this.userPassword.required(),
+  });
 }

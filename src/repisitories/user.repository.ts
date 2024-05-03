@@ -3,7 +3,7 @@ import { User } from "../models/user.model";
 
 export class UserRepository {
   public async getList(): Promise<IUser[]> {
-    return await User.find({});
+    return await User.find({ isDeleted: false });
   }
 
   public async createUser(dto: Partial<IUser>): Promise<IUser> {

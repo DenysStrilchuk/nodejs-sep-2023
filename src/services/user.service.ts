@@ -11,17 +11,18 @@ class UserService {
     return await this.findUserOrThrow(userId);
   }
 
-  public async updateUserById(
-    userId: string,
-    dto: Partial<IUser>,
-  ): Promise<IUser> {
+  public async getMe(userId: string): Promise<IUser> {
+    return await this.findUserOrThrow(userId);
+  }
+
+  public async updateMe(userId: string, dto: Partial<IUser>): Promise<IUser> {
     await this.findUserOrThrow(userId);
     return await userRepository.updateUserById(userId, dto);
   }
 
-  public async deleteUserById(userId: string): Promise<void> {
+  public async deleteMe(userId: string): Promise<void> {
     await this.findUserOrThrow(userId);
-    return await userRepository.deleteUserById(userId);
+    await userRepository.updateUserById(userId, { isDeleted: true });
   }
 
   private async findUserOrThrow(userId: string): Promise<IUser> {
