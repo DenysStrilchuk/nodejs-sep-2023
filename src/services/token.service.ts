@@ -1,28 +1,26 @@
-import { configs } from "@typescript-eslint/eslint-plugin";
 import * as jsonwebtoken from "jsonwebtoken";
 
+import { config } from "../configs/config";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
-import { ITokenPair } from "../interfaces/token.interface";
+import { ITokenResponse } from "../interfaces/token.interface";
 
 class TokenService {
-  public async generatePair(payload: IJWTPayload): Promise<ITokenPair> {
+  public generatePair(payload: IJWTPayload): ITokenResponse {
     const accessToken = jsonwebtoken.sign(
       payload,
       process.env.JWT_ACCESS_SECRET,
-      { expiresIn: configs.JWT_ACCESS_EXPIRES_IN },
+      { expiresIn: config.JWT_ACCESS_EXPIRES_IN },
     );
 
-    const refreshToken = jsonwebtoken.sign(
-      payload,
-      configs.env.JWT_REFRESH_SECRET,
-      { expiresIn: configs.JWT_REFRESH_EXPIRES_IN },
-    );
+    const refreshToken = jsonwebtoken.sign(payload, config.JWT_REFRESH_SECRET, {
+      expiresIn: config.JWT_REFRESH_EXPIRES_IN,
+    });
 
     return {
       accessToken,
-      accessExpiresIn: configs.JWT_ACCESS_EXPIRES_IN,
+      accessExpiresIn: config.JWT_ACCESS_EXPIRES_IN,
       refreshToken,
-      refreshExpiresIn: configs.JWT_REFRESH_EXPIRES_IN,
+      refreshExpiresIn: config.JWT_REFRESH_EXPIRES_IN,
     };
   }
 }
