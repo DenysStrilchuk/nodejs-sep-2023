@@ -1,5 +1,6 @@
 import { ApiError } from "../errors/api-error";
-import { ITokenResponse } from "../interfaces/token.interface";
+import { IJWTPayload } from "../interfaces/jwt-payload.interface";
+import { IToken, ITokenResponse } from "../interfaces/token.interface";
 import { IUser } from "../interfaces/user.interface";
 import { tokenRepository } from "../repisitories/token.repository";
 import { userRepository } from "../repisitories/user.repository";
@@ -44,6 +45,19 @@ class AuthService {
       throw new ApiError("Wrong email or password", 401);
     }
     return user;
+  }
+
+  public async refresh(jwtPayload: IJWTPayload, oldPair: IToken): Promise<any> {
+    const newPair = tokenService.generatePair({
+      userId: jwtPayload.userId,
+      role: jwtPayload.role,
+    });
+
+    await tokenRepository.deleteById(oldPair._id);
+    await tokenRepository.create({
+      ...newPair,
+      _userId: jwtPayload.userId,
+    });
   }
 
   private async isEmailExist(email: string): Promise<void> {
