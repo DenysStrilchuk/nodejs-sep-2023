@@ -21,6 +21,7 @@ class AuthService {
       userId: user._id,
       role: user.role,
     });
+
     await tokenRepository.create({
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
@@ -32,7 +33,7 @@ class AuthService {
   public async signIn(dto: {
     email: string;
     password: string;
-  }): Promise<IUser> {
+  }): Promise<{ user: IUser; tokens: ITokenResponse }> {
     const user = await userRepository.getUserByParams({ email: dto.email });
     if (!user) {
       throw new ApiError("Wrong email or password", 401);
@@ -44,10 +45,23 @@ class AuthService {
     if (!isCompare) {
       throw new ApiError("Wrong email or password", 401);
     }
-    return user;
+    const tokens = tokenService.generatePair({
+      userId: user._id,
+      role: user.role,
+    });
+
+    await tokenRepository.create({
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      _userId: user._id,
+    });
+    return { user, tokens };
   }
 
-  public async refresh(jwtPayload: IJWTPayload, oldPair: IToken): Promise<any> {
+  public async refresh(
+    jwtPayload: IJWTPayload,
+    oldPair: IToken,
+  ): Promise<ITokenResponse> {
     const newPair = tokenService.generatePair({
       userId: jwtPayload.userId,
       role: jwtPayload.role,
@@ -58,6 +72,7 @@ class AuthService {
       ...newPair,
       _userId: jwtPayload.userId,
     });
+    return newPair;
   }
 
   private async isEmailExist(email: string): Promise<void> {
