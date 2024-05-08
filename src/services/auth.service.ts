@@ -4,6 +4,7 @@ import { IToken, ITokenResponse } from "../interfaces/token.interface";
 import { IUser } from "../interfaces/user.interface";
 import { tokenRepository } from "../repisitories/token.repository";
 import { userRepository } from "../repisitories/user.repository";
+import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 
@@ -55,6 +56,7 @@ class AuthService {
       refreshToken: tokens.refreshToken,
       _userId: user._id,
     });
+    await emailService.sendMail(dto.email);
     return { user, tokens };
   }
 
