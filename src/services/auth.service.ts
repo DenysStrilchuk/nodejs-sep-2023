@@ -1,3 +1,4 @@
+import { EEmailActions } from "../constants/email.constants";
 import { ApiError } from "../errors/api-error";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
 import { IToken, ITokenResponse } from "../interfaces/token.interface";
@@ -28,6 +29,9 @@ class AuthService {
       refreshToken: tokens.refreshToken,
       _userId: user._id,
     });
+    await emailService.sendMail(dto.email, EEmailActions.WELCOME, {
+      name: user.name,
+    });
     return { user, tokens };
   }
 
@@ -56,7 +60,6 @@ class AuthService {
       refreshToken: tokens.refreshToken,
       _userId: user._id,
     });
-    await emailService.sendMail(dto.email);
     return { user, tokens };
   }
 
