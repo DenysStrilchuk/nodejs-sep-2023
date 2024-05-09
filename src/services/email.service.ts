@@ -1,5 +1,7 @@
 import nodemailer, { Transporter } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import hbs from "nodemailer-express-handlebars";
+import * as path from "path";
 
 import { ApiError } from "../errors/api-error";
 
@@ -14,14 +16,37 @@ class EmailService {
         pass: "vzduivkswbhlcjek",
       },
     });
+
+    const handlebarOptions = {
+      viewEngine: {
+        extname: ".hbs",
+        defaultLayout: "main",
+        layoutsDir: path.join(
+          process.cwd(),
+          "src",
+          "email-templates",
+          "layouts",
+        ),
+        partialsDir: path.join(
+          process.cwd(),
+          "src",
+          "email-templates",
+          "partials",
+        ),
+      },
+      viewPath: path.join(process.cwd(), "src", "email-templates", "views"),
+      extname: ".hbs",
+    };
+    this.transporter.use("compile", hbs(handlebarOptions));
   }
   public async sendMail(email: string) {
     try {
-      return await this.transporter.sendMail({
+      const mailOptions = {
         to: email,
-        subject: "Our first email",
-        html: "<div> Hello, it's our first email </div>",
-      });
+        subject: "Hello",
+        template: "register",
+      };
+      return await this.transporter.sendMail(mailOptions);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }

@@ -80,7 +80,7 @@ class AuthService {
   private async isEmailExist(email: string): Promise<void> {
     const user = await userRepository.getUserByParams({ email });
     if (user) {
-      throw new ApiError("email is alredy exist", 409);
+      throw new ApiError("email is already exist", 409);
     }
   }
 }
