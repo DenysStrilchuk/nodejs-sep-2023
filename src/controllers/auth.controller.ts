@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 
+import { IForgotDto } from "../interfaces/action-token.interface";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
 import { IToken } from "../interfaces/token.interface";
 import { IUser } from "../interfaces/user.interface";
 import { authService } from "../services/auth.service";
-import {IForgotDto} from "../interfaces/action-token.interface";
 
 class AuthController {
   public async signUp(req: Request, res: Response, next: NextFunction) {
