@@ -1,5 +1,9 @@
 import { EEmailActions } from "../constants/email.constants";
+import { errorMessages } from "../constants/error-messages.constant";
+import { statusCodes } from "../constants/status-codes.constant";
+import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
 import { ApiError } from "../errors/api-error";
+import { IForgotDto } from "../interfaces/action-token.interface";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
 import { IToken, ITokenResponse } from "../interfaces/token.interface";
 import { IUser } from "../interfaces/user.interface";
@@ -80,10 +84,27 @@ class AuthService {
     return newPair;
   }
 
+  public async forgotPassword(dto: IForgotDto): Promise<void> {
+    const user = await userRepository.getUserByParams({ email: dto.email });
+    if (!user) return;
+
+    const token = tokenService.generateActionToken(
+      { userId: user._id, role: user.role },
+      ActionTokenTypeEnum.FORGOT,
+    );
+    await emailService.sendMail(user.email, EEmailActions.FORGOT_PASSWORD, {
+      token,
+      name: user.name,
+    });
+  }
+
   private async isEmailExist(email: string): Promise<void> {
     const user = await userRepository.getUserByParams({ email });
     if (user) {
-      throw new ApiError("email is already exist", 409);
+      throw new ApiError(
+        errorMessages.EMAIL_ALREADY_EXIST,
+        statusCodes.CONFLICT,
+      );
     }
   }
 }
