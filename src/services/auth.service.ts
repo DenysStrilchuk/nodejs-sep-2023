@@ -115,6 +115,7 @@ class AuthService {
     await actionTokenRepository.deleteByParams({
       tokenType: ActionTokenTypeEnum.FORGOT,
     });
+    await tokenRepository.deleteByParams({ _userId: user._id });
   }
 
   private async isEmailExist(email: string): Promise<void> {
