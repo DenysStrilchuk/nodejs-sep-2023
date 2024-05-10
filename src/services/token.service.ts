@@ -50,29 +50,30 @@ class TokenService {
   }
 
   public generateActionToken(
-    payload: IJWTPayload,
-    type: ActionTokenTypeEnum,
+      payload: IJWTPayload,
+      type: ActionTokenTypeEnum,
   ): string {
     let secret: string;
     let expiresIn: string;
 
     switch (type) {
       case ActionTokenTypeEnum.FORGOT:
-        secret = config.JWT_ACCESS_SECRET;
+        secret = config.JWT_ACTION_FORGOT_TOKEN_SECRET;
         expiresIn = config.JWT_ACTION_FORGOT_EXPIRES_IN;
         break;
+
       default:
         throw new ApiError(
-          "Invalid token type",
-          statusCodes.INTERNAL_SERVER_ERROR,
+            "Invalid token type",
+            statusCodes.INTERNAL_SERVER_ERROR,
         );
     }
     return jsonwebtoken.sign(payload, secret, { expiresIn });
   }
 
   public checkActionToken(
-    token: string,
-    type: ActionTokenTypeEnum,
+      token: string,
+      type: ActionTokenTypeEnum,
   ): IJWTPayload {
     try {
       let secret: string;
@@ -87,9 +88,9 @@ class TokenService {
 
         default:
           throw new ApiError(
-            "Invalid token  type",
-            statusCodes.INTERNAL_SERVER_ERROR,
-        );
+              "Invalid token type",
+              statusCodes.INTERNAL_SERVER_ERROR,
+          );
       }
 
       return jsonwebtoken.verify(token, secret) as IJWTPayload;
