@@ -61,6 +61,10 @@ class TokenService {
         secret = config.JWT_ACTION_FORGOT_TOKEN_SECRET;
         expiresIn = config.JWT_ACTION_FORGOT_EXPIRES_IN;
         break;
+      case ActionTokenTypeEnum.VERIFY:
+        secret = config.JWT_ACTION_VERIFY_TOKEN_SECRET;
+        expiresIn = config.JWT_ACTION_VERIFY_EXPIRES_IN;
+        break;
 
       default:
         throw new ApiError(
@@ -84,6 +88,7 @@ class TokenService {
           break;
 
         case ActionTokenTypeEnum.VERIFY:
+          secret = config.JWT_ACTION_VERIFY_TOKEN_SECRET;
           break;
 
         default:

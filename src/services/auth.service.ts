@@ -7,9 +7,9 @@ import { IForgot, ISetForgot } from "../interfaces/action-token.interface";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
 import { IToken, ITokenResponse } from "../interfaces/token.interface";
 import { IUser } from "../interfaces/user.interface";
-import { actionTokenRepository } from "../repisitories/action-token.repository";
-import { tokenRepository } from "../repisitories/token.repository";
-import { userRepository } from "../repisitories/user.repository";
+import { actionTokenRepository } from "../repositories/action-token.repository";
+import { tokenRepository } from "../repositories/token.repository";
+import { userRepository } from "../repositories/user.repository";
 import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
@@ -34,9 +34,22 @@ class AuthService {
       refreshToken: tokens.refreshToken,
       _userId: user._id,
     });
-    await emailService.sendMail(dto.email, EEmailActions.WELCOME, {
-      name: user.name,
+
+    const actionToken = tokenService.generateActionToken(
+      { userId: user._id, role: user.role },
+      ActionTokenTypeEnum.VERIFY,
+    );
+    await actionTokenRepository.create({
+      tokenType: ActionTokenTypeEnum.VERIFY,
+      actionToken,
+      _userId: user._id,
     });
+    await Promise.all([
+      emailService.sendMail(dto.email, EEmailActions.WELCOME, {
+        name: user.name,
+        actionToken,
+      }),
+    ]);
     return { user, tokens };
   }
 
@@ -116,6 +129,18 @@ class AuthService {
       tokenType: ActionTokenTypeEnum.FORGOT,
     });
     await tokenRepository.deleteByParams({ _userId: user._id });
+  }
+
+  public async verify(jwtPayload: IJWTPayload): Promise<IUser> {
+    const [user] = await Promise.all([
+      userRepository.updateUserById(jwtPayload.userId, {
+        isVerified: true,
+      }),
+      actionTokenRepository.deleteByParams({
+        tokenType: ActionTokenTypeEnum.VERIFY,
+      }),
+    ]);
+    return user;
   }
 
   private async isEmailExist(email: string): Promise<void> {
