@@ -70,7 +70,10 @@ class TokenService {
     return jsonwebtoken.sign(payload, secret, { expiresIn });
   }
 
-  public checkActionToken(token: string, type: ActionTokenTypeEnum): IJWTPayload {
+  public checkActionToken(
+    token: string,
+    type: ActionTokenTypeEnum,
+  ): IJWTPayload {
     try {
       let secret: string;
 
@@ -83,7 +86,10 @@ class TokenService {
           break;
 
         default:
-          throw new ApiError("Invalid token  type", statusCodes.INTERNAL_SERVER_ERROR);
+          throw new ApiError(
+            "Invalid token  type",
+            statusCodes.INTERNAL_SERVER_ERROR,
+        );
       }
 
       return jsonwebtoken.verify(token, secret) as IJWTPayload;
