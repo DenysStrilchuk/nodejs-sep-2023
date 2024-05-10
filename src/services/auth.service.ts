@@ -7,6 +7,7 @@ import { IForgotDto } from "../interfaces/action-token.interface";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
 import { IToken, ITokenResponse } from "../interfaces/token.interface";
 import { IUser } from "../interfaces/user.interface";
+import { actionTokenRepository } from "../repisitories/action-token.repository";
 import { tokenRepository } from "../repisitories/token.repository";
 import { userRepository } from "../repisitories/user.repository";
 import { emailService } from "./email.service";
@@ -88,12 +89,17 @@ class AuthService {
     const user = await userRepository.getUserByParams({ email: dto.email });
     if (!user) return;
 
-    const token = tokenService.generateActionToken(
+    const actionToken = tokenService.generateActionToken(
       { userId: user._id, role: user.role },
       ActionTokenTypeEnum.FORGOT,
     );
+    await actionTokenRepository.create({
+      tokenType: ActionTokenTypeEnum.FORGOT,
+      actionToken,
+      _userId: user._id,
+    });
     await emailService.sendMail(user.email, EEmailActions.FORGOT_PASSWORD, {
-      token,
+      actionToken,
       name: user.name,
     });
   }
