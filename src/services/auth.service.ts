@@ -3,7 +3,7 @@ import { errorMessages } from "../constants/error-messages.constant";
 import { statusCodes } from "../constants/status-codes.constant";
 import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
 import { ApiError } from "../errors/api-error";
-import { IForgotDto } from "../interfaces/action-token.interface";
+import { IForgot, ISetForgot } from "../interfaces/action-token.interface";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
 import { IToken, ITokenResponse } from "../interfaces/token.interface";
 import { IUser } from "../interfaces/user.interface";
@@ -85,7 +85,7 @@ class AuthService {
     return newPair;
   }
 
-  public async forgotPassword(dto: IForgotDto): Promise<void> {
+  public async forgotPassword(dto: IForgot): Promise<void> {
     const user = await userRepository.getUserByParams({ email: dto.email });
     if (!user) return;
 
@@ -101,6 +101,19 @@ class AuthService {
     await emailService.sendMail(user.email, EEmailActions.FORGOT_PASSWORD, {
       actionToken,
       name: user.name,
+    });
+  }
+
+  public async setForgotPassword(
+    dto: ISetForgot,
+    jwtPayload: IJWTPayload,
+  ): Promise<void> {
+    const user = await userRepository.getUserById(jwtPayload.userId);
+    const hashedPassword = await passwordService.hashPassword(dto.password);
+
+    await userRepository.updateUserById(user._id, { password: hashedPassword });
+    await actionTokenRepository.deleteByParams({
+      tokenType: ActionTokenTypeEnum.FORGOT,
     });
   }
 

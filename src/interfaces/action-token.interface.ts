@@ -1,7 +1,8 @@
 import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
 import { IUser } from "./user.interface";
 
-export interface IForgotDto extends Pick<IUser, "email"> {}
+export interface IForgot extends Pick<IUser, "email"> {}
+export interface ISetForgot extends Pick<IUser, "password"> {}
 
 export interface IActionToken {
   id?: string;

@@ -69,6 +69,28 @@ class TokenService {
     }
     return jsonwebtoken.sign(payload, secret, { expiresIn });
   }
+
+  public checkActionToken(token: string, type: ActionTokenTypeEnum): IJWTPayload {
+    try {
+      let secret: string;
+
+      switch (type) {
+        case ActionTokenTypeEnum.FORGOT:
+          secret = config.JWT_ACTION_FORGOT_TOKEN_SECRET;
+          break;
+
+        case ActionTokenTypeEnum.VERIFY:
+          break;
+
+        default:
+          throw new ApiError("Invalid token  type", statusCodes.INTERNAL_SERVER_ERROR);
+      }
+
+      return jsonwebtoken.verify(token, secret) as IJWTPayload;
+    } catch (error) {
+      throw new ApiError("Token is not valid", statusCodes.UNAUTHORIZED);
+    }
+  }
 }
 
 export const tokenService = new TokenService();
