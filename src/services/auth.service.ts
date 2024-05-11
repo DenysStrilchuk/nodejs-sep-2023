@@ -157,6 +157,7 @@ class AuthService {
     }
     const hashedPassword = await passwordService.hashPassword(dto.newPassword);
     await userRepository.updateUserById(user._id, { password: hashedPassword });
+    await tokenRepository.deleteByParams({ _userId: user._id });
   }
 
   private async isEmailExist(email: string): Promise<void> {
