@@ -143,6 +143,22 @@ class AuthService {
     return user;
   }
 
+  public async changePassword(
+    jwtPayload: IJWTPayload,
+    dto: { oldPassword: string; newPassword: string },
+  ): Promise<void> {
+    const user = await userRepository.getUserById(jwtPayload.userId);
+    const isCompare = await passwordService.comparePassword(
+      dto.oldPassword,
+      user.password,
+    );
+    if (!isCompare) {
+      throw new ApiError("Wrong old password", statusCodes.UNAUTHORIZED);
+    }
+    const hashedPassword = await passwordService.hashPassword(dto.newPassword);
+    await userRepository.updateUserById(user._id, { password: hashedPassword });
+  }
+
   private async isEmailExist(email: string): Promise<void> {
     const user = await userRepository.getUserByParams({ email });
     if (user) {
