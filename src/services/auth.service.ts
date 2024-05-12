@@ -6,7 +6,7 @@ import { ApiError } from "../errors/api-error";
 import { IForgot, ISetForgot } from "../interfaces/action-token.interface";
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
 import { IToken, ITokenResponse } from "../interfaces/token.interface";
-import { IUser } from "../interfaces/user.interface";
+import { IChangePassword, IUser } from "../interfaces/user.interface";
 import { actionTokenRepository } from "../repositories/action-token.repository";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
@@ -145,7 +145,7 @@ class AuthService {
 
   public async changePassword(
     jwtPayload: IJWTPayload,
-    dto: { oldPassword: string; newPassword: string },
+    dto: IChangePassword,
   ): Promise<void> {
     const user = await userRepository.getUserById(jwtPayload.userId);
     const isCompare = await passwordService.comparePassword(
