@@ -8,10 +8,10 @@ import { emailService } from "../services/email.service";
 const handler = async () => {
   try {
     console.log("[START CRON] Notify old visitors");
-    const date = TimeHelper.subtractByParams(0, "days");
+    const date = TimeHelper.subtractByParams(1, "days");
     const users = await userRepository.findWithOutActivityAfter(date);
 
-    const result = await Promise.all(
+    await Promise.all(
       users.map(async (user) => {
         return await emailService.sendMail(
           user.email,
@@ -22,7 +22,6 @@ const handler = async () => {
         );
       }),
     );
-    console.log("result: ", result.length);
   } catch (error) {
     console.error("notifyOldVisitors: ", error);
   } finally {
@@ -30,4 +29,4 @@ const handler = async () => {
   }
 };
 
-export const notifyOldVisitors = new CronJob("*/20 * * * * *", handler);
+export const notifyOldVisitors = new CronJob("* * * 4 * *", handler);

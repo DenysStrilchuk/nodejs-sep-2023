@@ -15,6 +15,6 @@ export const allTemplates = {
   },
   [EEmailActions.OLD_VISITOR]: {
     templateName: "old-visitor",
-    subject: "Do not worry, your password is under control",
+    subject: "We haven't seen each other for a long time.",
   },
 };

@@ -28,9 +28,9 @@ export class UserRepository {
     });
   }
 
-  public async deleteUserById(userId: string): Promise<void> {
-    await User.deleteOne({ _id: userId });
-  }
+  // public async deleteUserById(userId: string): Promise<void> {
+  //   await User.deleteOne({ _id: userId });
+  // }
 
   public async findWithOutActivityAfter(date: Date): Promise<IUser[]> {
     return await User.aggregate([
