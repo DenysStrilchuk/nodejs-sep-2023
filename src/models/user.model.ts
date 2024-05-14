@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, required: false },
     password: { type: String, required: true },
     role: { type: String, enum: RoleEnum, default: RoleEnum.USER },
+    avatar: { type: String, required: false },
     isDeleted: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
   },
