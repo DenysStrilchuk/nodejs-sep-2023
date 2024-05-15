@@ -28,6 +28,12 @@ router.post(
   userController.uploadAvatar,
 );
 
+router.delete(
+  "/me/avatar",
+  authMiddleware.checkAccessToken,
+  userController.deleteAvatar,
+);
+
 router.get("/:userId", commonMiddleware.isIdValid, userController.getUserById);
 
 export const userRouter = router;
