@@ -2,15 +2,21 @@ import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 
 import { IJWTPayload } from "../interfaces/jwt-payload.interface";
-import { IUser } from "../interfaces/user.interface";
+import { IUser, IUserListQuery } from "../interfaces/user.interface";
 import { UserPresenter } from "../presenters/user.presenter";
 import { userService } from "../services/user.service";
 
 class UserController {
   public async getList(req: Request, res: Response, next: NextFunction) {
     try {
-      const users = await userService.getList();
-      res.json(users);
+      const query = req.query as IUserListQuery;
+      const [users, total] = await userService.getList(query);
+      const response = UserPresenter.toPublicResponseListDto(
+        users,
+        query,
+        total,
+      );
+      res.json(response);
     } catch (e) {
       next(e);
     }

@@ -1,10 +1,26 @@
-import { IUser } from "../interfaces/user.interface";
+import { FilterQuery } from "mongoose";
+
+import { IUser, IUserListQuery } from "../interfaces/user.interface";
 import { Token } from "../models/token.model";
 import { User } from "../models/user.model";
 
 export class UserRepository {
-  public async getList(): Promise<IUser[]> {
-    return await User.find({ isDeleted: false });
+  public async getList(query: IUserListQuery): Promise<[IUser[], number]> {
+    const { page = 1, limit = 10, search = "" } = query;
+    const filterObj: FilterQuery<IUser> = { isDeleted: false };
+    if (search) {
+      filterObj.name = { $regex: search, $options: "i" };
+      // filterObj.name = [
+      //   { name: { $regex: search, $options: "i" } },
+      //   { email: { $regex: search, $options: "i" } },
+      // ];
+    }
+
+    const skip = (page - 1) * limit;
+    return await Promise.all([
+      User.find(filterObj).limit(limit).skip(skip),
+      User.countDocuments(filterObj),
+    ]);
   }
 
   public async createUser(dto: Partial<IUser>): Promise<IUser> {

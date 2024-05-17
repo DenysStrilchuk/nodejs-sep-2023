@@ -40,3 +40,15 @@ export interface IChangePassword {
   oldPassword: string;
   newPassword: string;
 }
+
+export interface IUserListQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+
+  [key: string]: any;
+}
+
+export interface IUserListResponse extends IUserListQuery {
+  data: IPublicUser[];
+}
